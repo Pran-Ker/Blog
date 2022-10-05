@@ -1,0 +1,16 @@
+{
+    "blogs": [
+        {
+            "title": "My first",
+            "body": "Hello nigga, kids a sad as fack",
+            "author": "mario",
+            "id" : 1
+        },
+        {
+            "title": "Opwning Party",
+            "body": "hey yo this sa pady yo",
+            "author": "Popcox",
+            "id": 2
+        }
+    ]
+}
