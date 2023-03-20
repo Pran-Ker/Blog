@@ -1,21 +1,63 @@
-import Navbar from './Navbar';
-import Home from './Home';
-import { BrowserRouter as Router, Route, Switch} from 'react-route-dom';
+import './App.css';
+import {useEffect, useState} from "react";
+
+import uuid from 'react-uuid';
+import Main from './Main';
+import Sidebar from './Sidebar';
 
 function App() {
+  const [notes, setNotes] = useState(
+    localStorage.notes ? JSON.parse(localStorage.notes) : []
+  );
+  const [activeNote, setActiveNote] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const onAddNote = () => {
+    const newNote = {
+      id: uuid(),
+      title: "Untitled Note",
+      body: "",
+      lastModified: Date.now(),
+    };
+
+    setNotes([newNote, ...notes]);
+    setActiveNote(newNote.id);
+  };
+
+  const onDeleteNote = (noteId) => {
+    setNotes(notes.filter(({ id }) => id !== noteId));
+  };
+
+  const onUpdateNote = (updatedNote) => {
+    const updatedNotesArr = notes.map((note) => {
+      if (note.id === updatedNote.id) {
+        return updatedNote;
+      }
+
+      return note;
+    });
+
+    setNotes(updatedNotesArr);
+  };
+
+  const getActiveNote = () => {
+    return notes.find(({ id }) => id === activeNote);
+  };
+
   return (
-    <Router>
-      <div className="App">
-      <Navbar />
-      <div className="content">
-        <Switch>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-      </div>
-    </Router>
+    <div className="App">
+      <Sidebar
+        notes={notes}
+        onAddNote={onAddNote}
+        onDeleteNote={onDeleteNote}
+        activeNote={activeNote}
+        setActiveNote={setActiveNote}
+      />
+      <Main activeNote={getActiveNote()} onUpdateNote={onUpdateNote} />
+    </div>
   );
 }
 
