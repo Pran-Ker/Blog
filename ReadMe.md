@@ -13,7 +13,7 @@ To run the blog site on your local machine, follow these steps:
 
 ## Preview:
 
-![Alt text](/screenshots/ss1.png?raw=true "Main")
+![Alt text](screenshot/ss1.png?raw=true "Main")
 
 
 ### Creating a new blog post
