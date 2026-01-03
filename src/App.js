@@ -1,63 +1,28 @@
 import './App.css';
-import {useEffect, useState} from "react";
-
-import uuid from 'react-uuid';
-import Main from './Main';
-import Sidebar from './Sidebar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './Header';
+import BlogList from './BlogList';
+import BlogPost from './BlogPost';
 
 function App() {
-  const [notes, setNotes] = useState(
-    localStorage.notes ? JSON.parse(localStorage.notes) : []
-  );
-  const [activeNote, setActiveNote] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
-
-  const onAddNote = () => {
-    const newNote = {
-      id: uuid(),
-      title: "Untitled Note",
-      body: "",
-      lastModified: Date.now(),
-    };
-
-    setNotes([newNote, ...notes]);
-    setActiveNote(newNote.id);
-  };
-
-  const onDeleteNote = (noteId) => {
-    setNotes(notes.filter(({ id }) => id !== noteId));
-  };
-
-  const onUpdateNote = (updatedNote) => {
-    const updatedNotesArr = notes.map((note) => {
-      if (note.id === updatedNote.id) {
-        return updatedNote;
-      }
-
-      return note;
-    });
-
-    setNotes(updatedNotesArr);
-  };
-
-  const getActiveNote = () => {
-    return notes.find(({ id }) => id === activeNote);
-  };
-
   return (
-    <div className="App">
-      <Sidebar
-        notes={notes}
-        onAddNote={onAddNote}
-        onDeleteNote={onDeleteNote}
-        activeNote={activeNote}
-        setActiveNote={setActiveNote}
-      />
-      <Main activeNote={getActiveNote()} onUpdateNote={onUpdateNote} />
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+          </Routes>
+        </main>
+        <footer className="footer">
+          <div className="footer-container">
+            <span className="footer-text">Terms of service</span>
+            <span className="footer-text">Privacy notice</span>
+          </div>
+        </footer>
+      </div>
+    </Router>
   );
 }
 
